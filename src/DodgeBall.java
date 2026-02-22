@@ -48,6 +48,7 @@ public class DodgeBall extends GraphicsProgram implements ActionListener {
 		}
 		moveAllBallsOnce();
 		moveAllEnemiesOnce();
+		directCollision();
 	}
 	
 	public void mousePressed(MouseEvent e) {
@@ -95,6 +96,22 @@ public class DodgeBall extends GraphicsProgram implements ActionListener {
 	private void moveAllEnemiesOnce() {
 		for (GRect enemy : enemies) {
 			enemy.move(0, rgen.nextInt(-2, 2));
+		}
+	}
+	
+	private void directCollision() {
+		ArrayList<GRect> toRemove = new ArrayList<GRect>();
+		for (GOval ball : balls) {
+			double x = ball.getX() + ball.getWidth() + 1;
+			double y = ball.getY() + ball.getHeight() / 2;
+			GObject hit = getElementAt(x, y);
+			if (hit instanceof GRect) {
+				toRemove.add((GRect) hit);
+			}
+		}
+		for (GRect enemy : toRemove) {
+			remove(enemy);
+			enemies.remove(enemy);
 		}
 	}
 	
